@@ -1,6 +1,5 @@
 .build/
 .idea/
-CMakeLists.txt
 cmake-build-debug/
 philosopher
 *.o
