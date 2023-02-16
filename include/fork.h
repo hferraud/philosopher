@@ -22,4 +22,6 @@ typedef struct s_fork
 	pthread_mutex_t	lock;
 }					t_fork;
 
+t_fork	*init_forks(int nb_philo);
+
 #endif

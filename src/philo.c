@@ -13,6 +13,8 @@
 
 void	*philo_routine(void *arg)
 {
+	(void)arg;
+	
 	printf("test\n");
 	return (NULL);
 }
