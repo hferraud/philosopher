@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 #include "fork.h"
 
-int	*init_forks(int nb_philo)
+t_fork	*init_forks(int nb_philo)
 {
 	t_fork	*forks;
 	int i;
