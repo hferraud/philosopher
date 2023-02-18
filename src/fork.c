@@ -11,20 +11,26 @@
 /* ************************************************************************** */
 #include "fork.h"
 
-t_fork	*fork_init(int nb_philo)
+t_fork	*fork_init(t_philo *p_data)
 {
 	t_fork	*forks;
-	int i;
+	int		i;
 
-	forks = malloc(sizeof (t_fork) * nb_philo);
+	forks = malloc(sizeof (t_fork) * p_data->philo_total);
 	if (forks == NULL)
 		return (NULL);
 	i = 0;
-	while (i < nb_philo)
+	while (i < p_data->philo_total)
 	{
 		forks[i].nb = i;
 		forks[i].used = false;
-		pthread_mutex_init(&forks[i].lock, NULL);
+		if (pthread_mutex_init(&forks[i].lock, NULL) != 0)
+		{
+			while (i)
+				pthread_mutex_destroy(&forks[--i].lock);
+			free(forks);
+			return (NULL);
+		}
 		i++;
 	}
 	return (forks);

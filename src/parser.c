@@ -11,8 +11,8 @@
 /* ************************************************************************** */
 #include "parser.h"
 
-static int	ft_atoll(char *str);
-static bool is_digit(char c);
+static size_t	ft_atoll(const char *str);
+static bool		is_digit(char c);
 
 t_philo	philo_parse(int argc, char **args)
 {
@@ -23,14 +23,14 @@ t_philo	philo_parse(int argc, char **args)
 		errno = EINVAL;
 		return (p_data);
 	}
-	p_data.nb_philo = ft_atoll(args[1]);
+	p_data.philo_total = ft_atoll(args[1]);
 	p_data.time_to_die = ft_atoll(args[2]);
 	p_data.time_to_eat = ft_atoll(args[3]);
 	p_data.time_to_sleep = ft_atoll(args[4]);
 	return (p_data);
 }
 
-static int	ft_atoll(char *str)
+static size_t	ft_atoll(const char *str)
 {
 	size_t	nb;
 

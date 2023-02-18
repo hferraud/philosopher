@@ -18,7 +18,9 @@ void	*philo_routine(void *arg)
 	t_philo		*p_data;
 
 	p_data = (t_philo *) arg;
-
+	while (p_data->status == PENDING)
+		;
+	
 	return (NULL);
 }
 
@@ -27,11 +29,15 @@ void philo_init(t_philo *p_data)
 	int	i;
 
 	i = 0;
-	while(i < p_data->nb_philo)
+	p_data->philo_nb = 0;
+	p_data->forks = fork_init();
+	p_data->status = PENDING;
+	while(i < p_data->philo_total)
 	{
 		philo_init_one(p_data);
 		if (errno)
 			return ;
+		p_data->philo_nb++;
 		i++;
 	}
 }
