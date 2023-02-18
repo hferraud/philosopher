@@ -11,19 +11,38 @@
 /* ************************************************************************** */
 #include "philo.h"
 
+static void	philo_init_one(t_philo *p_data);
+
 void	*philo_routine(void *arg)
 {
-	(void)arg;
-	
-	printf("test\n");
+	t_philo		*p_data;
+
+	p_data = (t_philo *) arg;
+
 	return (NULL);
 }
 
-void	philo_init(int nb_philo)
+void philo_init(t_philo *p_data)
 {
-	pthread_t	thid;
+	int	i;
+
+	i = 0;
+	while(i < p_data->nb_philo)
+	{
+		philo_init_one(p_data);
+		if (errno)
+			return ;
+		i++;
+	}
+}
+
+static void	philo_init_one(t_philo *p_data)
+{
+	pthread_t	thread_id;
 	void		*ret;
 
-	pthread_create(&thid, NULL, philo_routine, &nb_philo);
-	pthread_join(thid, &ret);
+	pthread_create(&thread_id, NULL, philo_routine, p_data);
+	if (errno)
+		return ;
+	pthread_join(thread_id, &ret);
 }

@@ -10,4 +10,6 @@ add_executable(philo
         include/philo.h
         src/fork.c
         src/main.c
-        src/philo.c)
+        src/parser.c
+        src/philo.c
+        include/parser.h)

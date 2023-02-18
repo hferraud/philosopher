@@ -1,20 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mururoah <mururoah@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/30 17:38:00 by mururoah          #+#    #+#             */
-/*   Updated: 2023/01/30 17:38:00 by mururoah         ###   ########lyon.fr   */
+/*   Created: 2023/02/16 21:16:00 by hferraud          #+#    #+#             */
+/*   Updated: 2023/02/16 21:16:00 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
-#include "philo.h"
+#ifndef PARSER_H
+# define PARSER_H
 
-int main (int argc, char **argv)
-{
-	t_philo p_data;
+# include <stdbool.h>
+# include <errno.h>
+# include "philo.h"
 
-	p_data = philo_parse(argc, argv);
-	philo_init(&p_data);
-}
+t_philo	philo_parse(int argc, char **args);
+
+#endif

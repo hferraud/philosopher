@@ -18,10 +18,11 @@
 
 typedef struct s_fork
 {
+	int 			nb;
 	bool			used;
 	pthread_mutex_t	lock;
 }					t_fork;
 
-t_fork	*init_forks(int nb_philo);
+t_fork	*fork_init(int nb_philo);
 
 #endif

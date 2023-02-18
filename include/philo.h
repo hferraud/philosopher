@@ -14,7 +14,18 @@
 
 # include <pthread.h>
 # include <stdio.h>
+# include "fork.h"
+# include "parser.h"
 
-void	philo_init(int nb_philo);
+typedef struct s_philo
+{
+	size_t	nb_philo;
+	size_t	time_to_die;
+	size_t	time_to_eat;
+	size_t	time_to_sleep;
+	t_fork	*forks;
+}			t_philo;
+
+void philo_init(t_philo *p_data);
 
 #endif

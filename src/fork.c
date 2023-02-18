@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 #include "fork.h"
 
-t_fork	*init_forks(int nb_philo)
+t_fork	*fork_init(int nb_philo)
 {
 	t_fork	*forks;
 	int i;
@@ -22,6 +22,9 @@ t_fork	*init_forks(int nb_philo)
 	i = 0;
 	while (i < nb_philo)
 	{
+		forks[i].nb = i;
+		forks[i].used = false;
+		pthread_mutex_init(&forks[i].lock, NULL);
 		i++;
 	}
 	return (forks);
