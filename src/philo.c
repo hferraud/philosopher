@@ -19,8 +19,9 @@ void	*philo_routine(void *arg)
 	t_philo		*p_data;
 
 	p_data = (t_philo *) arg;
+	printf("in thread%zu\n",p_data->philo_nb);
 	while (p_data->status == PENDING)
-		;
+		usleep(5);
 	philo_eat(p_data);
 	philo_sleep(p_data);
 	return (NULL);
