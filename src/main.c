@@ -15,6 +15,6 @@ int main (int argc, char **argv)
 {
 	t_philo p_data;
 
-	p_data = philo_parse(argc, argv);
+	philo_parse(argc, argv, &p_data);
 	philo_init(&p_data);
 }

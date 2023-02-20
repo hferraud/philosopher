@@ -14,7 +14,7 @@
 t_fork	*fork_init(t_philo *p_data)
 {
 	t_fork	*forks;
-	int		i;
+	size_t	i;
 
 	forks = malloc(sizeof (t_fork) * p_data->philo_total);
 	if (forks == NULL)

@@ -11,7 +11,8 @@
 /* ************************************************************************** */
 #include "philo.h"
 
-static void	philo_init_one(t_philo *p_data);
+void	philo_eat(t_philo *p_data);
+void	philo_sleep(t_philo *p_data);
 
 void	*philo_routine(void *arg)
 {
@@ -20,35 +21,28 @@ void	*philo_routine(void *arg)
 	p_data = (t_philo *) arg;
 	while (p_data->status == PENDING)
 		;
-	
+	philo_eat(p_data);
+	philo_sleep(p_data);
 	return (NULL);
 }
 
-void philo_init(t_philo *p_data)
+void	philo_eat(t_philo *p_data)
 {
-	int	i;
+	size_t	left_fork;
+	size_t	right_fork;
 
-	i = 0;
-	p_data->philo_nb = 0;
-	p_data->forks = fork_init();
-	p_data->status = PENDING;
-	while(i < p_data->philo_total)
-	{
-		philo_init_one(p_data);
-		if (errno)
-			return ;
-		p_data->philo_nb++;
-		i++;
-	}
+	left_fork = p_data->philo_nb;
+	right_fork = (p_data->philo_nb + 1) % p_data->philo_total;
+	pthread_mutex_lock(&p_data->forks[left_fork].lock);
+	pthread_mutex_lock(&p_data->forks[right_fork].lock);
+	printf("%zu is eating\n", p_data->philo_nb);
+	usleep(p_data->time_to_eat);
+	pthread_mutex_unlock(&p_data->forks[left_fork].lock);
+	pthread_mutex_unlock(&p_data->forks[right_fork].lock);
 }
 
-static void	philo_init_one(t_philo *p_data)
+void	philo_sleep(t_philo *p_data)
 {
-	pthread_t	thread_id;
-	void		*ret;
-
-	pthread_create(&thread_id, NULL, philo_routine, p_data);
-	if (errno)
-		return ;
-	pthread_join(thread_id, &ret);
+	printf("%zu is sleeping\n", p_data->philo_nb);
+	usleep(p_data->time_to_sleep);
 }

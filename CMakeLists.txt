@@ -12,4 +12,4 @@ add_executable(philo
         src/main.c
         src/parser.c
         src/philo.c
-        include/parser.h)
+        src/philo_init.c)

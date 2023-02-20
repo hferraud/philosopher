@@ -14,8 +14,11 @@
 
 # include <pthread.h>
 # include <stdio.h>
+# include <unistd.h>
+# include <errno.h>
 # include "fork.h"
-# include "parser.h"
+
+typedef struct s_fork t_fork;
 
 typedef enum e_p_status
 {
@@ -34,6 +37,8 @@ typedef struct s_philo
 	t_p_status	status;
 }				t_philo;
 
-void philo_init(t_philo *p_data);
+void	philo_parse(int argc, char **args, t_philo *p_data);
+void	philo_init(t_philo *p_data);
+void	*philo_routine(void *arg);
 
 #endif

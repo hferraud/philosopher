@@ -17,13 +17,16 @@
 # include <pthread.h>
 # include "philo.h"
 
+typedef struct s_philo t_philo;
+
 typedef struct s_fork
 {
-	int 			nb;
+	size_t			nb;
 	bool			used;
 	pthread_mutex_t	lock;
 }					t_fork;
 
 t_fork	*fork_init(t_philo *p_data);
+void	fork_access(t_philo *p_data);
 
 #endif
