@@ -11,16 +11,16 @@
 /* ************************************************************************** */
 #include "fork.h"
 
-t_fork	*fork_init(t_philo *p_data)
+t_fork	*fork_init(t_philo_s_data *s_data)
 {
 	t_fork	*forks;
 	size_t	i;
 
-	forks = malloc(sizeof (t_fork) * p_data->philo_total);
+	forks = malloc(sizeof (t_fork) * s_data->philo_total);
 	if (forks == NULL)
 		return (NULL);
 	i = 0;
-	while (i < p_data->philo_total)
+	while (i < s_data->philo_total)
 	{
 		forks[i].nb = i;
 		forks[i].used = false;

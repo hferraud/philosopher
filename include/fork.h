@@ -17,7 +17,7 @@
 # include <pthread.h>
 # include "philo.h"
 
-typedef struct s_philo t_philo;
+typedef struct s_philo_s_data t_philo_s_data;
 
 typedef struct s_fork
 {
@@ -26,7 +26,7 @@ typedef struct s_fork
 	pthread_mutex_t	lock;
 }					t_fork;
 
-t_fork	*fork_init(t_philo *p_data);
-void	fork_access(t_philo *p_data);
+t_fork	*fork_init(t_philo_s_data *s_data);
+void	fork_access(t_philo_s_data *s_data);
 
 #endif

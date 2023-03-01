@@ -1,26 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   philo_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mururoah <mururoah@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: hferraud <hferraud@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/30 17:38:00 by mururoah          #+#    #+#             */
-/*   Updated: 2023/01/30 17:38:00 by mururoah         ###   ########lyon.fr   */
+/*   Created: 2023/02/28 16:32:00 by hferraud          #+#    #+#             */
+/*   Updated: 2023/02/28 16:32:00 by hferraud         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philo.h"
 
-int main (int argc, char **argv)
+__suseconds_t	get_timestamp(t_philo_s_data *s_data)
 {
-	t_philo_s_data	s_data;
-	t_philo_u_data 	*u_data;
+	struct timeval tv;
 
-	philo_parse(argc, argv, &s_data);
-	if (errno)
-		return (errno);
-	u_data = philo_init(&s_data);
-	if (u_data == NULL)
-		return (errno);
-	philo_run(&s_data, u_data);
+	gettimeofday(&tv, NULL);
+	return (tv.tv_usec - s_data->timestamp.tv_usec);
 }

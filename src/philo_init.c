@@ -11,36 +11,39 @@
 /* ************************************************************************** */
 #include "philo.h"
 
-static pthread_t	philo_init_one(t_philo *p_data);
+static pthread_t	philo_init_one(t_philo_u_data *u_data);
 
-void philo_init(t_philo *p_data)
+t_philo_u_data	*philo_init(t_philo_s_data	*s_data)
 {
-	size_t		i;
-	pthread_t	thread_id;
+	t_philo_u_data	*u_data;
+	size_t			i;
 
+	u_data = malloc(sizeof (t_philo_u_data) * s_data->philo_total);
+	if (u_data == NULL)
+		return (NULL);
+	s_data->forks = fork_init(s_data);
+	if (s_data->forks == NULL)
+		return (NULL);
+	s_data->status.status = PENDING;
+	gettimeofday(&s_data->timestamp, NULL);
+	pthread_mutex_init(&s_data->status.lock, NULL);
 	i = 0;
-	p_data->philo_nb = 0;
-	p_data->forks = fork_init(p_data);
-	p_data->status = PENDING;
-	while(i < p_data->philo_total)
+	while(i < s_data->philo_total)
 	{
-		thread_id = philo_init_one(p_data);
+		u_data[i].philo_nb = i;
+		u_data[i].s_data = s_data;
+		u_data[i].thread_id = philo_init_one(u_data + i);
 		if (errno)
-			return ;
-		p_data->philo_nb++;
-		if (i != p_data->philo_total - 1)
-			pthread_detach(thread_id);
+			return (NULL);
 		i++;
 	}
-	pthread_join(thread_id, NULL);
-	p_data->status = RUNNING;
-	printf("running\n");
+	return (u_data);
 }
 
-static pthread_t	philo_init_one(t_philo *p_data)
+static pthread_t	philo_init_one(t_philo_u_data *u_data)
 {
-	pthread_t	thread_id;
+	pthread_t		thread_id;
 
-	pthread_create(&thread_id, NULL, philo_routine, p_data);
+	pthread_create(&thread_id, NULL, philo_routine, u_data);
 	return thread_id;
 }

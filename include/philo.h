@@ -13,32 +13,49 @@
 # define PHILO_H
 
 # include <pthread.h>
-# include <stdio.h>
 # include <unistd.h>
+# include <stdio.h>
 # include <errno.h>
+# include <sys/time.h>
 # include "fork.h"
 
 typedef struct s_fork t_fork;
 
-typedef enum e_p_status
+typedef enum e_status
 {
 	PENDING,
 	RUNNING
-}	t_p_status;
+}	t_status;
 
-typedef struct s_philo
+typedef struct s_philo_status
 {
-	size_t		philo_nb;
-	size_t		philo_total;
-	size_t		time_to_die;
-	size_t		time_to_eat;
-	size_t		time_to_sleep;
-	t_fork		*forks;
-	t_p_status	status;
-}				t_philo;
+	t_status		status;
+	pthread_mutex_t	lock;
+}					t_philo_status;
 
-void	philo_parse(int argc, char **args, t_philo *p_data);
-void	philo_init(t_philo *p_data);
-void	*philo_routine(void *arg);
+typedef struct s_philo_s_data
+{
+	size_t			philo_total;
+	size_t			time_to_die;
+	size_t			time_to_eat;
+	size_t			time_to_sleep;
+	struct timeval	timestamp;
+	t_fork			*forks;
+	t_philo_status	status;
+}				t_philo_s_data;
+
+typedef struct s_philo_u_data
+{
+	size_t			philo_nb;
+	pthread_t		thread_id;
+	t_philo_s_data	*s_data;
+}					t_philo_u_data;
+
+void			philo_parse(int argc, char **args, t_philo_s_data *s_data);
+t_philo_u_data	*philo_init(t_philo_s_data	*s_data);
+void			philo_run(t_philo_s_data *s_data, t_philo_u_data *u_data);
+void			*philo_routine(void *arg);
+
+__suseconds_t	get_timestamp(t_philo_s_data *s_data);
 
 #endif
