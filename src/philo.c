@@ -31,9 +31,12 @@ void	*philo_routine(void *arg)
 		status = u_data->s_data->status.status;
 		pthread_mutex_unlock(&u_data->s_data->status.lock);
 	}
-	philo_eat(u_data);
-	philo_sleep(u_data);
-	philo_print_think(u_data);
+	while (1)
+	{
+		philo_eat(u_data);
+		philo_sleep(u_data);
+		philo_print_think(u_data);
+	}
 	return (NULL);
 }
 
@@ -59,30 +62,50 @@ void	philo_eat(t_philo_u_data *u_data)
 	t_philo_s_data	*s_data;
 	size_t			left_fork;
 	size_t			right_fork;
+	bool			flag[2];
 
 	s_data = u_data->s_data;
 	left_fork = u_data->philo_nb;
 	right_fork = (u_data->philo_nb + 1) % s_data->philo_total;
-	pthread_mutex_lock(&s_data->forks[left_fork].lock);
-	if (s_data->forks[left_fork].use == UNUSED)
+	flag[LEFT] = false;
+	flag[RIGHT] = false;
+	while ((flag[LEFT] != true || flag[RIGHT] != true))
 	{
-		s_data->forks[left_fork].use = USED;
-		philo_print_fork(u_data);
+		if (flag[LEFT] == false)
+		{
+			pthread_mutex_lock(&s_data->forks[left_fork].lock);
+			if (s_data->forks[left_fork].use == UNUSED)
+			{
+				s_data->forks[left_fork].use = USED;
+				philo_print_fork(u_data);
+				flag[LEFT] = true;
+			}
+			pthread_mutex_unlock(&s_data->forks[left_fork].lock);
+		}
+		if (flag[RIGHT] == false)
+		{
+			pthread_mutex_lock(&s_data->forks[right_fork].lock);
+			if (s_data->forks[right_fork].use == UNUSED)
+			{
+				s_data->forks[right_fork].use = USED;
+				philo_print_fork(u_data);
+				flag[RIGHT] = true;
+			}
+			pthread_mutex_unlock(&s_data->forks[right_fork].lock);
+		}
 	}
+	philo_print_eat(u_data);
+	usleep(u_data->s_data->time_to_eat * 1000);
+	pthread_mutex_lock(&s_data->forks[left_fork].lock);
+		s_data->forks[left_fork].use = UNUSED;
 	pthread_mutex_unlock(&s_data->forks[left_fork].lock);
 	pthread_mutex_lock(&s_data->forks[right_fork].lock);
-	if (s_data->forks[right_fork].use == UNUSED)
-	{
-		s_data->forks[right_fork].use = USED;
-		philo_print_fork(u_data);
-	}
+		s_data->forks[right_fork].use = UNUSED;
 	pthread_mutex_unlock(&s_data->forks[right_fork].lock);
-	philo_print_eat(u_data);
-	usleep(u_data->s_data->time_to_eat);
 }
 
 void	philo_sleep(t_philo_u_data *u_data)
 {
 	philo_print_sleep(u_data);
-	usleep(u_data->s_data->time_to_sleep);
+	usleep(u_data->s_data->time_to_sleep * 1000);
 }

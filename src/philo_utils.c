@@ -11,10 +11,15 @@
 /* ************************************************************************** */
 #include "philo.h"
 
-__suseconds_t	get_timestamp(t_philo_s_data *s_data)
+size_t	get_timestamp(t_philo_s_data *s_data)
 {
-	struct timeval tv;
+	struct timeval	current_time;
+	struct timeval	philo_time;
+    size_t			timestamp;
 
-	gettimeofday(&tv, NULL);
-	return ((int)(tv.tv_usec / 100.0 - s_data->timestamp.tv_usec / 100.0) + 0.5);
+	philo_time = s_data->timestamp;
+	gettimeofday(&current_time, NULL);
+	timestamp = (current_time.tv_sec * 1000.0 - philo_time.tv_sec * 1000.0)
+			+ (current_time.tv_usec / 1000.0 - philo_time.tv_usec / 1000.0) + 0.5;
+	return (timestamp);
 }

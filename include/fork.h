@@ -16,13 +16,19 @@
 # include <pthread.h>
 # include "philo.h"
 
+typedef struct s_philo_s_data t_philo_s_data;
+
+enum
+{
+	LEFT = 0,
+	RIGHT = 1
+};
+
 typedef enum
 {
 	USED,
 	UNUSED
 }t_use;
-
-typedef struct s_philo_s_data t_philo_s_data;
 
 typedef struct s_fork
 {
@@ -32,6 +38,5 @@ typedef struct s_fork
 }					t_fork;
 
 t_fork	*fork_init(t_philo_s_data *s_data);
-void	fork_access(t_philo_s_data *s_data);
 
 #endif
