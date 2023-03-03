@@ -13,16 +13,21 @@
 # define FORK_H
 
 # include <stdlib.h>
-# include <stdbool.h>
 # include <pthread.h>
 # include "philo.h"
+
+typedef enum
+{
+	USED,
+	UNUSED
+}t_use;
 
 typedef struct s_philo_s_data t_philo_s_data;
 
 typedef struct s_fork
 {
 	size_t			nb;
-	bool			used;
+	t_use			use;
 	pthread_mutex_t	lock;
 }					t_fork;
 

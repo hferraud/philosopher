@@ -16,5 +16,5 @@ __suseconds_t	get_timestamp(t_philo_s_data *s_data)
 	struct timeval tv;
 
 	gettimeofday(&tv, NULL);
-	return (tv.tv_usec - s_data->timestamp.tv_usec);
+	return ((int)(tv.tv_usec / 100.0 - s_data->timestamp.tv_usec / 100.0) + 0.5);
 }

@@ -10,6 +10,7 @@ SRC			=		main.c \
 					philo.c \
 					philo_init.c \
 					philo_utils.c \
+					philo_print.c \
 					parser.c \
 					fork.c \
 
@@ -17,7 +18,7 @@ OBJS		=		$(SRC:%.c=$(BUILD_DIR)%.o)
 
 DEPS		=		$(OBJS:.o=.d)
 
-CFLAGS		=		-Wall -Werror -Wextra -pthread # -fsanitize=thread
+CFLAGS		=		-Wall -Werror -Wextra -pthread -fsanitize=thread
 
 IFLAGS		=		-I$(INC_DIR)
 

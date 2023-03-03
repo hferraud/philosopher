@@ -23,7 +23,7 @@ t_fork	*fork_init(t_philo_s_data *s_data)
 	while (i < s_data->philo_total)
 	{
 		forks[i].nb = i;
-		forks[i].used = false;
+		forks[i].use = UNUSED;
 		if (pthread_mutex_init(&forks[i].lock, NULL) != 0)
 		{
 			while (i)

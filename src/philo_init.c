@@ -25,7 +25,6 @@ t_philo_u_data	*philo_init(t_philo_s_data	*s_data)
 	if (s_data->forks == NULL)
 		return (NULL);
 	s_data->status.status = PENDING;
-	gettimeofday(&s_data->timestamp, NULL);
 	pthread_mutex_init(&s_data->status.lock, NULL);
 	i = 0;
 	while(i < s_data->philo_total)

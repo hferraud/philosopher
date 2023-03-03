@@ -22,8 +22,8 @@ void	*philo_routine(void *arg)
 
 	u_data = (t_philo_u_data *) arg;
 	gettimeofday(&tv, NULL);
-	printf("%zu philosopher %zu created.\n",
-		   get_timestamp(u_data->s_data), u_data->philo_nb);
+//	printf("%zu philosopher %zu created.\n",
+//		   get_timestamp(u_data->s_data), u_data->philo_nb);
 	status = PENDING;
 	while(status == PENDING)
 	{
@@ -33,6 +33,7 @@ void	*philo_routine(void *arg)
 	}
 	philo_eat(u_data);
 	philo_sleep(u_data);
+	philo_print_think(u_data);
 	return (NULL);
 }
 
@@ -41,6 +42,7 @@ void	philo_run(t_philo_s_data *s_data, t_philo_u_data *u_data)
 	size_t			i;
 
 	pthread_mutex_lock(&u_data->s_data->status.lock);
+	gettimeofday(&s_data->timestamp, NULL);
 	u_data->s_data->status.status = RUNNING;
 	printf("UNLOCK\n");
 	pthread_mutex_unlock(&u_data->s_data->status.lock);
@@ -62,18 +64,25 @@ void	philo_eat(t_philo_u_data *u_data)
 	left_fork = u_data->philo_nb;
 	right_fork = (u_data->philo_nb + 1) % s_data->philo_total;
 	pthread_mutex_lock(&s_data->forks[left_fork].lock);
-	pthread_mutex_lock(&s_data->forks[right_fork].lock);
-	printf("%zu %zu has taken a fork.\n",
-		   get_timestamp(u_data->s_data), u_data->philo_nb);
-	printf("\x1b[32m%zu %zu is eating.\x1b[m\n",
-		   get_timestamp(u_data->s_data), u_data->philo_nb);
-	usleep(u_data->s_data->time_to_eat);
+	if (s_data->forks[left_fork].use == UNUSED)
+	{
+		s_data->forks[left_fork].use = USED;
+		philo_print_fork(u_data);
+	}
 	pthread_mutex_unlock(&s_data->forks[left_fork].lock);
+	pthread_mutex_lock(&s_data->forks[right_fork].lock);
+	if (s_data->forks[right_fork].use == UNUSED)
+	{
+		s_data->forks[right_fork].use = USED;
+		philo_print_fork(u_data);
+	}
 	pthread_mutex_unlock(&s_data->forks[right_fork].lock);
+	philo_print_eat(u_data);
+	usleep(u_data->s_data->time_to_eat);
 }
 
 void	philo_sleep(t_philo_u_data *u_data)
 {
-	printf("%zu is sleeping\n", u_data->philo_nb);
+	philo_print_sleep(u_data);
 	usleep(u_data->s_data->time_to_sleep);
 }

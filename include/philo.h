@@ -15,9 +15,11 @@
 # include <pthread.h>
 # include <unistd.h>
 # include <stdio.h>
+# include <stdbool.h>
 # include <errno.h>
 # include <sys/time.h>
 # include "fork.h"
+# include "print.h"
 
 typedef struct s_fork t_fork;
 
