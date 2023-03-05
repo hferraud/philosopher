@@ -49,6 +49,8 @@ typedef struct s_philo_s_data
 typedef struct s_philo_u_data
 {
 	size_t			philo_nb;
+	size_t			meal_total;
+	struct timeval	meal_time;
 	pthread_t		thread_id;
 	t_philo_s_data	*s_data;
 }					t_philo_u_data;
