@@ -12,7 +12,7 @@
 #include "philo.h"
 
 static int philo_access_fork(t_philo_u_data *u_data, t_philo_s_data *s_data);
-static int philo_access_one_fork(t_philo_u_data *u_data, size_t fork_nb);
+//static int philo_access_one_fork(t_philo_u_data *u_data, size_t fork_nb);
 static int philo_unaccess_fork(t_philo_u_data *u_data, t_philo_s_data *s_data);
 static int	philo_unaccess_one_fork(t_philo_s_data *s_data, size_t fork_nb);
 
@@ -32,60 +32,30 @@ static int philo_access_fork(t_philo_u_data *u_data, t_philo_s_data *s_data)
 {
 	size_t			left_fork;
 	size_t			right_fork;
-	int				flag[2];
+	bool			flag;
 
 	left_fork = u_data->philo_nb;
 	right_fork = (u_data->philo_nb + 1) % s_data->philo_total;
-	flag[LEFT] = false;
-	flag[RIGHT] = false;
-	while ((flag[LEFT] != true || flag[RIGHT] != true))
+	flag = false;
+	while (!flag)
 	{
-		if (flag[LEFT] == false)
+		pthread_mutex_lock(&s_data->forks[left_fork].lock);
+		if (s_data->forks[left_fork].use == UNUSED)
 		{
-			flag[LEFT] = philo_access_one_fork(u_data, left_fork);
-			if (flag[LEFT] == -1)
-				return (-1);
+			pthread_mutex_lock(&s_data->forks[right_fork].lock);
+			if (s_data->forks[right_fork].use == UNUSED)
+			{
+				s_data->forks[left_fork].use = USED;
+				philo_print_fork(u_data);
+				s_data->forks[right_fork].use = USED;
+				philo_print_fork(u_data);
+				flag = true;
+			}
+			pthread_mutex_unlock(&s_data->forks[right_fork].lock);
 		}
-		if (flag[RIGHT] == false)
-		{
-			flag[RIGHT] = philo_access_one_fork(u_data, right_fork);
-			if (flag[RIGHT] == -1)
-				return (-1);
-		}
-		if (flag[LEFT] == true && flag[RIGHT] == false)
-			if (philo_unaccess_one_fork(s_data, left_fork) == -1)
-				return (-1);
-		if (flag[RIGHT] == true && flag[LEFT] == false)
-			if (philo_unaccess_one_fork(s_data, right_fork) == -1)
-				return (-1);
+		pthread_mutex_unlock(&s_data->forks[left_fork].lock);
 	}
 	return (0);
-}
-
-/**
- * @return 1 if the fork was unused, 0 otherwise. Return -1 if an error occured.
- */
-static int philo_access_one_fork(t_philo_u_data *u_data, size_t fork_nb)
-{
-	t_philo_s_data	*s_data;
-
-	s_data = u_data->s_data;
-	if (pthread_mutex_lock(&s_data->forks[fork_nb].lock) != 0)
-		return (-1);
-	if (s_data->forks[fork_nb].use == UNUSED)
-	{
-		s_data->forks[fork_nb].use = USED;
-		philo_print_fork(u_data);
-		if (pthread_mutex_unlock(&s_data->forks[fork_nb].lock) != 0)
-			return (-1);
-		return (1);
-	}
-	else
-	{
-		if (pthread_mutex_unlock(&s_data->forks[fork_nb].lock) != 0)
-			return (-1);
-		return (0);
-	}
 }
 
 static int philo_unaccess_fork(t_philo_u_data *u_data, t_philo_s_data *s_data)

@@ -26,7 +26,9 @@ typedef struct s_fork t_fork;
 typedef enum e_status
 {
 	PENDING,
-	RUNNING
+	RUNNING,
+	SOLVED,
+	INTERRUPTED
 }	t_status;
 
 typedef struct s_philo_status

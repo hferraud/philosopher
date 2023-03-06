@@ -31,7 +31,11 @@ void	*philo_routine(void *arg)
 	}
 	while (1)
 	{
+		if (philo_equalizer(u_data))
+			return (NULL);
 		philo_eat(u_data);
+		if (philo_equalizer(u_data))
+			return (NULL);
 		philo_sleep(u_data);
 		if (philo_equalizer(u_data))
 			return (NULL);
@@ -64,11 +68,24 @@ int	philo_equalizer(t_philo_u_data *u_data)
 	size_t			elapsed_time;
 
 	elapsed_time = get_elapsed_time(u_data->meal_time);
+	if (pthread_mutex_lock(&u_data->s_data->status.lock) != 0)
+		return (-1);
+	if (u_data->s_data->status.status == INTERRUPTED)
+	{
+		if (pthread_mutex_unlock(&u_data->s_data->status.lock) != 0)
+			return (-1);
+		return 1;
+	}
 	if (elapsed_time >= u_data->s_data->time_to_die)
 	{
 		philo_print_death(u_data);
+		u_data->s_data->status.status = INTERRUPTED;
+		if (pthread_mutex_unlock(&u_data->s_data->status.lock) != 0)
+			return (-1);
 		return (1);
 	}
+	if (pthread_mutex_unlock(&u_data->s_data->status.lock) != 0)
+		return (-1);
 	return (0);
 }
 
