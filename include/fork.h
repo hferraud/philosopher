@@ -32,7 +32,6 @@ typedef enum
 
 typedef struct s_fork
 {
-	size_t			nb;
 	t_use			use;
 	pthread_mutex_t	lock;
 }					t_fork;

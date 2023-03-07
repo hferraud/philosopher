@@ -12,7 +12,6 @@
 #include "philo.h"
 
 void	philo_sleep(t_philo_u_data *u_data);
-int		philo_equalizer(t_philo_u_data *u_data);
 
 void	*philo_routine(void *arg)
 {
@@ -31,8 +30,6 @@ void	*philo_routine(void *arg)
 	}
 	while (1)
 	{
-		if (philo_equalizer(u_data))
-			return (NULL);
 		philo_eat(u_data);
 		if (philo_equalizer(u_data))
 			return (NULL);
@@ -40,6 +37,7 @@ void	*philo_routine(void *arg)
 		if (philo_equalizer(u_data))
 			return (NULL);
 		philo_print_think(u_data);
+		usleep(10);
 	}
 }
 
@@ -49,7 +47,7 @@ void	philo_run(t_philo_u_data *u_data, t_philo_s_data *s_data)
 
 	pthread_mutex_lock(&s_data->status.lock);
 	s_data->status.status = RUNNING;
-	gettimeofday(&s_data->timestamp, NULL);
+	gettimeofday(&s_data->start_timestamp, NULL);
 	pthread_mutex_unlock(&s_data->status.lock);
 	i = 0;
 	while (i < s_data->philo_total)
@@ -60,7 +58,7 @@ void	philo_run(t_philo_u_data *u_data, t_philo_s_data *s_data)
 }
 
 /**
- * @brief Check whether the philosopher is dead and print the associated massage.
+ * @brief Check whether the philosopher is dead and print the associated message.
  * @return 1 if the philosopher is dead, 0 otherwise. Return -1 if an error occurred.
  */
 int	philo_equalizer(t_philo_u_data *u_data)
@@ -76,7 +74,7 @@ int	philo_equalizer(t_philo_u_data *u_data)
 			return (-1);
 		return 1;
 	}
-	if (elapsed_time >= u_data->s_data->time_to_die)
+	if (elapsed_time > u_data->s_data->time_to_die)
 	{
 		philo_print_death(u_data);
 		u_data->s_data->status.status = INTERRUPTED;

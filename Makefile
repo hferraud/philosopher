@@ -29,6 +29,8 @@ RM			=		rm -rf
 
 MKDIR		=		mkdir -p
 
+# RULES
+
 all:				$(NAME)
 
 -include			$(DEPS)

@@ -11,47 +11,70 @@
 /* ************************************************************************** */
 #include "print.h"
 
-void	philo_print_fork(t_philo_u_data *u_data)
+int	philo_print_fork(t_philo_u_data *u_data)
 {
 	struct timeval	timestamp;
 
-	timestamp = u_data->s_data->timestamp;
+	if (pthread_mutex_lock(&u_data->s_data->print_lock) != 0)
+		return (-1);
+	timestamp = u_data->s_data->start_timestamp;
 	printf("%s%zu %zu has taken a fork%s\n", AC_YELLOW,
 		   get_elapsed_time(timestamp), u_data->philo_nb, AC_NORMAL);
+	if (pthread_mutex_unlock(&u_data->s_data->print_lock) != 0)
+		return (-1);
+	return (0);
 }
 
-void	philo_print_eat(t_philo_u_data *u_data)
+int	philo_print_eat(t_philo_u_data *u_data, struct timeval timestamp)
 {
-	struct timeval	timestamp;
-
-	timestamp = u_data->s_data->timestamp;
+	if (pthread_mutex_lock(&u_data->s_data->print_lock) != 0)
+		return (-1);
+	timestamp = u_data->s_data->start_timestamp;
 	printf("%s%zu %zu is eating%s\n", AC_GREEN,
 		   get_elapsed_time(timestamp), u_data->philo_nb, AC_NORMAL);
+	if (pthread_mutex_unlock(&u_data->s_data->print_lock) != 0)
+		return (-1);
+	return (0);
 }
 
-void	philo_print_sleep(t_philo_u_data *u_data)
+int philo_print_sleep(t_philo_u_data *u_data)
 {
 	struct timeval	timestamp;
 
-	timestamp = u_data->s_data->timestamp;
+	if (pthread_mutex_lock(&u_data->s_data->print_lock) != 0)
+		return (-1);
+	timestamp = u_data->s_data->start_timestamp;
 	printf("%s%zu %zu is sleeping%s\n", AC_MAGENTA,
 		   get_elapsed_time(timestamp), u_data->philo_nb, AC_NORMAL);
+	if (pthread_mutex_unlock(&u_data->s_data->print_lock) != 0)
+		return (-1);
+	return (0);
 }
 
-void	philo_print_think(t_philo_u_data *u_data)
+int	philo_print_think(t_philo_u_data *u_data)
 {
 	struct timeval	timestamp;
 
-	timestamp = u_data->s_data->timestamp;
+	if (pthread_mutex_lock(&u_data->s_data->print_lock) != 0)
+		return (-1);
+	timestamp = u_data->s_data->start_timestamp;
 	printf("%s%zu %zu is thinking%s\n", AC_CYAN,
 		   get_elapsed_time(timestamp), u_data->philo_nb, AC_NORMAL);
+	if (pthread_mutex_unlock(&u_data->s_data->print_lock) != 0)
+		return (-1);
+	return (0);
 }
 
-void	philo_print_death(t_philo_u_data *u_data)
+int	philo_print_death(t_philo_u_data *u_data)
 {
 	struct timeval	timestamp;
 
-	timestamp = u_data->s_data->timestamp;
+	if (pthread_mutex_lock(&u_data->s_data->print_lock) != 0)
+		return (-1);
+	timestamp = u_data->s_data->start_timestamp;
 	printf("%s%zu %zu died%s\n", AC_RED,
 		   get_elapsed_time(timestamp), u_data->philo_nb, AC_NORMAL);
+	if (pthread_mutex_unlock(&u_data->s_data->print_lock) != 0)
+		return (-1);
+	return (0);
 }

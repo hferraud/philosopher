@@ -43,9 +43,10 @@ typedef struct s_philo_s_data
 	size_t			time_to_die;
 	size_t			time_to_eat;
 	size_t			time_to_sleep;
-	struct timeval	timestamp;
+	struct timeval	start_timestamp;
 	t_fork			*forks;
 	t_philo_status	status;
+	pthread_mutex_t	print_lock;
 }				t_philo_s_data;
 
 typedef struct s_philo_u_data
@@ -62,6 +63,7 @@ t_philo_u_data	*philo_init(t_philo_s_data	*s_data);
 void			philo_run(t_philo_u_data *u_data, t_philo_s_data *s_data);
 void			*philo_routine(void *arg);
 void			philo_eat(t_philo_u_data *u_data);
+int             philo_equalizer(t_philo_u_data *u_data);
 
 size_t	get_elapsed_time(struct timeval timestamp);
 

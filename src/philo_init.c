@@ -25,7 +25,10 @@ t_philo_u_data	*philo_init(t_philo_s_data	*s_data)
 	if (s_data->forks == NULL)
 		return (NULL);
 	s_data->status.status = PENDING;
-	pthread_mutex_init(&s_data->status.lock, NULL);
+	if (pthread_mutex_init(&s_data->status.lock, NULL) != 0)
+		return (NULL);
+	if (pthread_mutex_init(&s_data->print_lock, NULL) != 0)
+		return (NULL);
 	i = 0;
 	while(i < s_data->philo_total)
 	{

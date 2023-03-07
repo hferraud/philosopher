@@ -22,7 +22,6 @@ t_fork	*fork_init(t_philo_s_data *s_data)
 	i = 0;
 	while (i < s_data->philo_total)
 	{
-		forks[i].nb = i;
 		forks[i].use = UNUSED;
 		if (pthread_mutex_init(&forks[i].lock, NULL) != 0)
 		{

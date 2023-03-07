@@ -12,22 +12,24 @@
 #include "philo.h"
 
 static int philo_access_fork(t_philo_u_data *u_data, t_philo_s_data *s_data);
-//static int philo_access_one_fork(t_philo_u_data *u_data, size_t fork_nb);
 static int philo_unaccess_fork(t_philo_u_data *u_data, t_philo_s_data *s_data);
-static int	philo_unaccess_one_fork(t_philo_s_data *s_data, size_t fork_nb);
 
 void	philo_eat(t_philo_u_data *u_data)
 {
 	t_philo_s_data	*s_data;
 
 	s_data = u_data->s_data;
-	philo_access_fork(u_data, s_data);
-	philo_print_eat(u_data);
+	if (philo_access_fork(u_data, s_data) != 0)
+        return ;
 	gettimeofday(&u_data->meal_time, NULL);
+    philo_print_eat(u_data, u_data->meal_time);
 	usleep(u_data->s_data->time_to_eat * 1000);
 	philo_unaccess_fork(u_data, s_data);
 }
 
+/**
+ * @return 1 if forks cannot be accessed, 0 otherwise. Return -1 if an error occured
+ */
 static int philo_access_fork(t_philo_u_data *u_data, t_philo_s_data *s_data)
 {
 	size_t			left_fork;
@@ -39,10 +41,16 @@ static int philo_access_fork(t_philo_u_data *u_data, t_philo_s_data *s_data)
 	flag = false;
 	while (!flag)
 	{
-		pthread_mutex_lock(&s_data->forks[left_fork].lock);
+        if (philo_equalizer(u_data))
+            return (1);
+		if (left_fork == right_fork)
+			continue ;
+		if (pthread_mutex_lock(&s_data->forks[left_fork].lock) != 0)
+			return (-1);
 		if (s_data->forks[left_fork].use == UNUSED)
 		{
-			pthread_mutex_lock(&s_data->forks[right_fork].lock);
+			if (pthread_mutex_lock(&s_data->forks[right_fork].lock) != 0)
+				return (-1);
 			if (s_data->forks[right_fork].use == UNUSED)
 			{
 				s_data->forks[left_fork].use = USED;
@@ -51,9 +59,11 @@ static int philo_access_fork(t_philo_u_data *u_data, t_philo_s_data *s_data)
 				philo_print_fork(u_data);
 				flag = true;
 			}
-			pthread_mutex_unlock(&s_data->forks[right_fork].lock);
+			if (pthread_mutex_unlock(&s_data->forks[right_fork].lock) != 0)
+				return (-1);
 		}
-		pthread_mutex_unlock(&s_data->forks[left_fork].lock);
+		if (pthread_mutex_unlock(&s_data->forks[left_fork].lock) != 0)
+			return (-1);
 	}
 	return (0);
 }
@@ -66,19 +76,15 @@ static int philo_unaccess_fork(t_philo_u_data *u_data, t_philo_s_data *s_data)
 	left_fork = u_data->philo_nb;
 	right_fork = (u_data->philo_nb + 1) % s_data->philo_total;
 
-	if (philo_unaccess_one_fork(s_data, left_fork) == -1)
+	if (pthread_mutex_lock(&s_data->forks[left_fork].lock) != 0)
 		return (-1);
-	if (philo_unaccess_one_fork(s_data, right_fork) == -1)
+	s_data->forks[left_fork].use = UNUSED;
+	if (pthread_mutex_unlock(&s_data->forks[left_fork].lock) != 0)
 		return (-1);
-	return (0);
-}
-
-static int	philo_unaccess_one_fork(t_philo_s_data *s_data, size_t fork_nb)
-{
-	if (pthread_mutex_lock(&s_data->forks[fork_nb].lock) != 0)
+	if (pthread_mutex_lock(&s_data->forks[right_fork].lock) != 0)
 		return (-1);
-	s_data->forks[fork_nb].use = UNUSED;
-	if (pthread_mutex_unlock(&s_data->forks[fork_nb].lock) != 0)
+	s_data->forks[right_fork].use = UNUSED;
+	if (pthread_mutex_unlock(&s_data->forks[right_fork].lock) != 0)
 		return (-1);
 	return (0);
 }
