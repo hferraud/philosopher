@@ -66,5 +66,6 @@ void			philo_eat(t_philo_u_data *u_data);
 int             philo_equalizer(t_philo_u_data *u_data);
 
 size_t	get_elapsed_time(struct timeval timestamp);
+int		ft_usleep(struct timeval start_timestamp, size_t duration);
 
 #endif

@@ -19,11 +19,14 @@ void	philo_eat(t_philo_u_data *u_data)
 	t_philo_s_data	*s_data;
 
 	s_data = u_data->s_data;
+
 	if (philo_access_fork(u_data, s_data) != 0)
         return ;
 	gettimeofday(&u_data->meal_time, NULL);
     philo_print_eat(u_data, u_data->meal_time);
-	usleep(u_data->s_data->time_to_eat * 1000);
+	if (ft_usleep(u_data->meal_time, s_data->time_to_eat) == -1)
+		printf("ERROR\n");
+//	usleep(s_data->time_to_eat * 1000);
 	philo_unaccess_fork(u_data, s_data);
 }
 
