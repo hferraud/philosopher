@@ -54,6 +54,7 @@ typedef struct s_philo_u_data
 	size_t			philo_nb;
 	size_t			meal_total;
 	struct timeval	meal_time;
+	struct timeval	last_meal;
 	pthread_t		thread_id;
 	t_philo_s_data	*s_data;
 }					t_philo_u_data;
@@ -62,10 +63,11 @@ void			philo_parse(int argc, char **args, t_philo_s_data *s_data);
 t_philo_u_data	*philo_init(t_philo_s_data	*s_data);
 void			philo_run(t_philo_u_data *u_data, t_philo_s_data *s_data);
 void			*philo_routine(void *arg);
-void			philo_eat(t_philo_u_data *u_data);
+int				philo_eat(t_philo_u_data *u_data);
 int             philo_equalizer(t_philo_u_data *u_data);
 
 size_t	get_elapsed_time(struct timeval timestamp);
-int		ft_usleep(struct timeval start_timestamp, size_t duration);
+size_t	get_time_between(struct timeval start, struct timeval end);
+int		ft_usleep(struct timeval start_timestamp, size_t duration, t_philo_u_data *u_data);
 
 #endif

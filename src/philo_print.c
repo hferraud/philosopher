@@ -13,39 +13,41 @@
 
 int	philo_print_fork(t_philo_u_data *u_data)
 {
-	struct timeval	timestamp;
+	size_t	timestamp;
 
+	timestamp = get_time_between(u_data->s_data->start_timestamp, u_data->meal_time);
 	if (pthread_mutex_lock(&u_data->s_data->print_lock) != 0)
 		return (-1);
-	timestamp = u_data->s_data->start_timestamp;
 	printf("%s%zu %zu has taken a fork%s\n", AC_YELLOW,
-		   get_elapsed_time(timestamp), u_data->philo_nb, AC_NORMAL);
+		   timestamp, u_data->philo_nb, AC_NORMAL);
 	if (pthread_mutex_unlock(&u_data->s_data->print_lock) != 0)
 		return (-1);
 	return (0);
 }
 
-int	philo_print_eat(t_philo_u_data *u_data, struct timeval timestamp)
+int	philo_print_eat(t_philo_u_data *u_data)
 {
+	size_t	timestamp;
+
+	timestamp = get_time_between(u_data->s_data->start_timestamp, u_data->meal_time);
 	if (pthread_mutex_lock(&u_data->s_data->print_lock) != 0)
 		return (-1);
-	timestamp = u_data->s_data->start_timestamp;
 	printf("%s%zu %zu is eating%s\n", AC_GREEN,
-		   get_elapsed_time(timestamp), u_data->philo_nb, AC_NORMAL);
+		   timestamp, u_data->philo_nb, AC_NORMAL);
 	if (pthread_mutex_unlock(&u_data->s_data->print_lock) != 0)
 		return (-1);
 	return (0);
 }
 
-int philo_print_sleep(t_philo_u_data *u_data)
+int philo_print_sleep(t_philo_u_data *u_data, struct timeval timestamp)
 {
-	struct timeval	timestamp;
+	size_t	timer;
 
+	timer = get_time_between(u_data->s_data->start_timestamp, timestamp);
 	if (pthread_mutex_lock(&u_data->s_data->print_lock) != 0)
 		return (-1);
-	timestamp = u_data->s_data->start_timestamp;
 	printf("%s%zu %zu is sleeping%s\n", AC_MAGENTA,
-		   get_elapsed_time(timestamp), u_data->philo_nb, AC_NORMAL);
+		   timer, u_data->philo_nb, AC_NORMAL);
 	if (pthread_mutex_unlock(&u_data->s_data->print_lock) != 0)
 		return (-1);
 	return (0);

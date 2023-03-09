@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 #include "philo.h"
 
-void	philo_sleep(t_philo_u_data *u_data);
+static int	philo_sleep(t_philo_u_data *u_data);
 
 void	*philo_routine(void *arg)
 {
@@ -22,22 +22,22 @@ void	*philo_routine(void *arg)
 	u_data = (t_philo_u_data *) arg;
 	gettimeofday(&tv, NULL);
 	status = PENDING;
-	while(status == PENDING)
+	while (status == PENDING)
 	{
-		pthread_mutex_lock(&u_data->s_data->status.lock);
+		if (pthread_mutex_lock(&u_data->s_data->status.lock) != 0)
+			return (NULL);
 		status = u_data->s_data->status.status;
-		pthread_mutex_unlock(&u_data->s_data->status.lock);
+		if (pthread_mutex_unlock(&u_data->s_data->status.lock) != 0)
+			return (NULL);
 	}
 	while (1)
 	{
-		philo_eat(u_data);
-		if (philo_equalizer(u_data))
+		if (philo_eat(u_data) != 0)
 			return (NULL);
-		philo_sleep(u_data);
-		if (philo_equalizer(u_data))
+		if (philo_sleep(u_data) != 0)
 			return (NULL);
-		philo_print_think(u_data);
-		usleep(10);
+		if (philo_print_think(u_data) == -1 || usleep(100) == -1)
+			return (NULL);
 	}
 }
 
@@ -59,20 +59,21 @@ void	philo_run(t_philo_u_data *u_data, t_philo_s_data *s_data)
 
 /**
  * @brief Check whether the philosopher is dead and print the associated message.
- * @return 1 if the philosopher is dead, 0 otherwise. Return -1 if an error occurred.
+ * @return 1 if the philosopher is dead, 0 otherwise.
+ * Return -1 if an error occurred.
  */
 int	philo_equalizer(t_philo_u_data *u_data)
 {
 	size_t			elapsed_time;
 
-	elapsed_time = get_elapsed_time(u_data->meal_time);
+	elapsed_time = get_elapsed_time(u_data->last_meal);
 	if (pthread_mutex_lock(&u_data->s_data->status.lock) != 0)
 		return (-1);
 	if (u_data->s_data->status.status == INTERRUPTED)
 	{
 		if (pthread_mutex_unlock(&u_data->s_data->status.lock) != 0)
 			return (-1);
-		return 1;
+		return (1);
 	}
 	if (elapsed_time > u_data->s_data->time_to_die)
 	{
@@ -87,8 +88,16 @@ int	philo_equalizer(t_philo_u_data *u_data)
 	return (0);
 }
 
-void	philo_sleep(t_philo_u_data *u_data)
+static int	philo_sleep(t_philo_u_data *u_data)
 {
-	philo_print_sleep(u_data);
-	usleep(u_data->s_data->time_to_sleep * 1000);
+	struct timeval	timestamp;
+
+	gettimeofday(&timestamp, NULL);
+	if (philo_print_sleep(u_data, timestamp) == -1)
+		return (-1);
+	if (ft_usleep(timestamp, u_data->s_data->time_to_sleep, u_data) == 1)
+		return (1);
+	if (errno)
+		return (-1);
+	return (0);
 }

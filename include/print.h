@@ -27,8 +27,8 @@
 typedef struct s_philo_u_data t_philo_u_data;
 
 int	philo_print_fork(t_philo_u_data *u_data);
-int	philo_print_eat(t_philo_u_data *u_data, struct timeval timestamp);
-int	philo_print_sleep(t_philo_u_data *u_data);
+int	philo_print_eat(t_philo_u_data *u_data);
+int philo_print_sleep(t_philo_u_data *u_data, struct timeval timestamp);
 int	philo_print_think(t_philo_u_data *u_data);
 int	philo_print_death(t_philo_u_data *u_data);
 
