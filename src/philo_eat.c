@@ -27,10 +27,14 @@ int	philo_eat(t_philo_u_data *u_data)
 	u_data->last_meal = u_data->meal_time;
 	u_data->meal_total++;
     philo_print_eat(u_data);
-	if (ft_usleep(u_data->last_meal, s_data->time_to_eat, u_data) != 0)
+	if (ft_usleep(u_data->last_meal, s_data->time_to_eat, u_data) == 1)
+		return (1);
+	if (errno)
 		return (-1);
 	if (philo_unaccess_fork(u_data, s_data) == -1)
 		return (-1);
+	if (s_data->max_meal != -1 && u_data->meal_total == s_data->max_meal)
+		return (1);
 	return (0);
 }
 

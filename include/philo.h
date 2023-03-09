@@ -43,16 +43,17 @@ typedef struct s_philo_s_data
 	size_t			time_to_die;
 	size_t			time_to_eat;
 	size_t			time_to_sleep;
+	ssize_t			max_meal;
 	struct timeval	start_timestamp;
 	t_fork			*forks;
 	t_philo_status	status;
 	pthread_mutex_t	print_lock;
-}				t_philo_s_data;
+}					t_philo_s_data;
 
 typedef struct s_philo_u_data
 {
 	size_t			philo_nb;
-	size_t			meal_total;
+	ssize_t			meal_total;
 	struct timeval	meal_time;
 	struct timeval	last_meal;
 	pthread_t		thread_id;

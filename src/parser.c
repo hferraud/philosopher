@@ -17,7 +17,7 @@ static	void parse_error(void);
 
 void	philo_parse(int argc, char **args, t_philo_s_data *s_data)
 {
-	if (argc != 5)
+	if (argc < 5 || argc > 6)
 	{
 		errno = EINVAL;
 		return ;
@@ -32,6 +32,14 @@ void	philo_parse(int argc, char **args, t_philo_s_data *s_data)
 	if (errno)
 		return (parse_error());
 	s_data->time_to_sleep = ft_atoll(args[4]);
+	if (errno)
+		return (parse_error());
+	if (argc == 5)
+	{
+		s_data->max_meal = -1;
+		return ;
+	}
+	s_data->max_meal = (ssize_t) ft_atoll(args[5]);
 	if (errno)
 		return (parse_error());
 }
