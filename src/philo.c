@@ -58,6 +58,19 @@ void	philo_run(t_philo_u_data *u_data, t_philo_s_data *s_data)
 	}
 }
 
+void	philo_exit(t_philo_s_data *s_data)
+{
+	size_t	i;
+
+	i = 0;
+	while(i < s_data->philo_total)
+	{
+		pthread_mutex_destroy(&s_data->forks->lock);
+		i++;
+	}
+	pthread_mutex_destroy(&s_data->status.lock);
+}
+
 /**
  * @brief Check whether the philosopher is dead and print the associated message.
  * @return 1 if the philosopher is dead, 0 otherwise.
