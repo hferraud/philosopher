@@ -46,7 +46,6 @@ static pthread_t	philo_init_one(t_philo_u_data *u_data)
 {
 	pthread_t		thread_id;
 
-	gettimeofday(&u_data->last_meal, NULL);
 	u_data->meal_total = 0;
 	pthread_create(&thread_id, NULL, philo_routine, u_data);
 	return thread_id;

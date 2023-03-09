@@ -30,6 +30,7 @@ void	*philo_routine(void *arg)
 		if (pthread_mutex_unlock(&u_data->s_data->status.lock) != 0)
 			return (NULL);
 	}
+	u_data->last_meal = u_data->s_data->start_timestamp;
 	while (1)
 	{
 		if (philo_eat(u_data) != 0)
