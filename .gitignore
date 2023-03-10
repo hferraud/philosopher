@@ -1,5 +1,5 @@
 .build/
 .idea/
 cmake-build-debug/
-philo
+philo/philo
 *.o
