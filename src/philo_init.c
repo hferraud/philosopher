@@ -11,7 +11,8 @@
 /* ************************************************************************** */
 #include "philo.h"
 
-static int			philo_preset(t_philo_u_data **u_data, t_philo_s_data *s_data);
+static int			philo_preset(t_philo_u_data **u_data,
+						t_philo_s_data *s_data);
 static pthread_t	philo_init_one(t_philo_u_data *u_data);
 static void			philo_init_error(t_philo_s_data *s_data);
 
