@@ -13,7 +13,6 @@
 
 static int			philo_preset(t_philo_u_data *u_data, t_philo_s_data *s_data);
 static pthread_t	philo_init_one(t_philo_u_data *u_data);
-static void			philo_clear(t_philo_u_data *u_data, t_philo_s_data *s_data);
 static void			philo_init_error(t_philo_s_data *s_data);
 
 t_philo_u_data	*philo_init(t_philo_s_data	*s_data)
@@ -74,7 +73,7 @@ static pthread_t	philo_init_one(t_philo_u_data *u_data)
 	return (thread_id);
 }
 
-static void	philo_clear(t_philo_u_data *u_data, t_philo_s_data *s_data)
+void	philo_clear(t_philo_u_data *u_data, t_philo_s_data *s_data)
 {
 	pthread_mutex_destroy(&s_data->status.lock);
 	pthread_mutex_destroy(&s_data->print_lock);

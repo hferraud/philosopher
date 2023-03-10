@@ -22,6 +22,7 @@ int	main(int argc, char **argv)
 	u_data = philo_init(&s_data);
 	if (u_data == NULL)
 		return (errno);
-	philo_run(u_data, &s_data);
+	if (philo_run(u_data, &s_data) == -1)
+		philo_clear(u_data, &s_data);
 	philo_exit(&s_data);
 }
