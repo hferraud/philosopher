@@ -16,7 +16,7 @@ static int	philo_use_fork(t_philo_u_data *u_data, t_philo_s_data *s_data,
 				size_t fork1, size_t fork2);
 static int	philo_unuse_fork(t_philo_u_data *u_data, t_philo_s_data *s_data);
 
-int	philo_eat(t_philo_u_data *u_data)
+int	philo_eat(t_philo_u_data *u_data, struct timeval *timestamp)
 {
 	t_philo_s_data	*s_data;
 
@@ -33,6 +33,7 @@ int	philo_eat(t_philo_u_data *u_data)
 		return (1);
 	if (errno)
 		return (-1);
+	gettimeofday(timestamp, NULL);
 	if (philo_unuse_fork(u_data, s_data) == -1)
 		return (-1);
 	if (u_data->meal_total == s_data->max_meal && s_data->max_meal != -1)

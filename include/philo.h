@@ -64,7 +64,7 @@ t_philo_u_data	*philo_init(t_philo_s_data	*s_data);
 void			philo_clear(t_philo_u_data *u_data, t_philo_s_data *s_data);
 int				philo_run(t_philo_u_data *u_data, t_philo_s_data *s_data);
 void			*philo_routine(void *arg);
-int				philo_eat(t_philo_u_data *u_data);
+int				philo_eat(t_philo_u_data *u_data, struct timeval *timestamp);
 int				philo_equalizer(t_philo_u_data *u_data);
 
 size_t			get_elapsed_time(struct timeval timestamp);

@@ -11,12 +11,13 @@
 /* ************************************************************************** */
 #include "philo.h"
 
-static int	philo_sleep(t_philo_u_data *u_data);
+static int	philo_sleep(t_philo_u_data *u_data, struct timeval *timestamp);
 
 void	*philo_routine(void *arg)
 {
 	t_philo_u_data	*u_data;
 	t_status		status;
+	struct timeval	timestamp;
 
 	u_data = (t_philo_u_data *) arg;
 	status = PENDING;
@@ -33,11 +34,11 @@ void	*philo_routine(void *arg)
 	u_data->last_meal = u_data->s_data->start_timestamp;
 	while (1)
 	{
-		if (philo_eat(u_data) != 0)
+		if (philo_eat(u_data, &timestamp) != 0)
 			return (NULL);
-		if (philo_sleep(u_data) != 0)
+		if (philo_sleep(u_data, &timestamp) != 0)
 			return (NULL);
-		if (philo_print_think(u_data) == -1 || usleep(100) == -1)
+		if (philo_print_think(u_data) == -1 || usleep(20) == -1)
 			return (NULL);
 	}
 }
@@ -63,16 +64,13 @@ int	philo_run(t_philo_u_data *u_data, t_philo_s_data *s_data)
 	return (0);
 }
 
-static int	philo_sleep(t_philo_u_data *u_data)
+static int	philo_sleep(t_philo_u_data *u_data, struct timeval *timestamp)
 {
-	struct timeval	timestamp;
-
-	gettimeofday(&timestamp, NULL);
 	if (philo_equalizer(u_data))
 		return (1);
-	if (philo_print_sleep(u_data, timestamp) == -1)
+	if (philo_print_sleep(u_data, *timestamp) == -1)
 		return (-1);
-	if (ft_usleep(timestamp, u_data->s_data->time_to_sleep, u_data) == 1)
+	if (ft_usleep(*timestamp, u_data->s_data->time_to_sleep, u_data) == 1)
 		return (1);
 	if (errno)
 		return (-1);
