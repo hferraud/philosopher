@@ -12,6 +12,7 @@ SRC			=		main.c \
 					philo_init.c \
 					philo_utils.c \
 					philo_print.c \
+					philo_equalizer.c \
 					parser.c \
 					fork.c \
 

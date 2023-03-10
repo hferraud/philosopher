@@ -37,5 +37,6 @@ typedef struct s_fork
 }					t_fork;
 
 t_fork	*fork_init(t_philo_s_data *s_data);
+void	fork_clear(t_philo_s_data *s_data);
 
 #endif

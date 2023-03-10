@@ -27,14 +27,15 @@ int	philo_eat(t_philo_u_data *u_data)
 		return (-1);
 	u_data->last_meal = u_data->meal_time;
 	u_data->meal_total++;
-	philo_print_eat(u_data);
+	if (philo_print_eat(u_data) == -1)
+		return (-1);
 	if (ft_usleep(u_data->last_meal, s_data->time_to_eat, u_data) == 1)
 		return (1);
 	if (errno)
 		return (-1);
 	if (philo_unuse_fork(u_data, s_data) == -1)
 		return (-1);
-	if (s_data->max_meal != -1 && u_data->meal_total == s_data->max_meal)
+	if (u_data->meal_total == s_data->max_meal && s_data->max_meal != -1)
 		return (1);
 	return (0);
 }
@@ -81,9 +82,10 @@ static int	philo_use_fork(t_philo_u_data *u_data, t_philo_s_data *s_data,
 		if (s_data->forks[fork2].use == UNUSED)
 		{
 			s_data->forks[fork1].use = USED;
-			philo_print_fork(u_data);
 			s_data->forks[fork2].use = USED;
-			philo_print_fork(u_data);
+			if (philo_print_fork(u_data) == -1
+				|| philo_print_fork(u_data) == -1)
+				return (-1);
 			ret = 1;
 		}
 		if (pthread_mutex_unlock(&s_data->forks[fork2].lock) != 0)

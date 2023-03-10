@@ -12,4 +12,4 @@ add_executable(philo
         src/main.c
         src/parser.c
         src/philo.c
-        src/philo_init.c src/philo_print.c src/philo_utils.c src/philo_eat.c include/print.h)
+        src/philo_init.c src/philo_print.c src/philo_utils.c src/philo_eat.c include/print.h src/philo_equalizer.c)

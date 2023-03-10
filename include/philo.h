@@ -27,7 +27,6 @@ typedef enum e_status
 {
 	PENDING,
 	RUNNING,
-	SOLVED,
 	INTERRUPTED
 }	t_status;
 
@@ -62,7 +61,7 @@ typedef struct s_philo_u_data
 
 void			philo_parse(int argc, char **args, t_philo_s_data *s_data);
 t_philo_u_data	*philo_init(t_philo_s_data	*s_data);
-void			philo_run(t_philo_u_data *u_data, t_philo_s_data *s_data);
+int				philo_run(t_philo_u_data *u_data, t_philo_s_data *s_data);
 void			*philo_routine(void *arg);
 int				philo_eat(t_philo_u_data *u_data);
 void			philo_exit(t_philo_s_data *s_data);

@@ -34,3 +34,16 @@ t_fork	*fork_init(t_philo_s_data *s_data)
 	}
 	return (forks);
 }
+
+void	fork_clear(t_philo_s_data *s_data)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < s_data->philo_total);
+	{
+		pthread_mutex_destroy(&s_data->forks[i].lock);
+		i++;
+	}
+	free(s_data->forks);
+}
