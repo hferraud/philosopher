@@ -39,7 +39,7 @@ t_philo_u_data	*philo_init(t_philo_s_data	*s_data)
 static int	philo_preset(t_philo_u_data **u_data, t_philo_s_data *s_data)
 {
 	*u_data = malloc(sizeof (t_philo_u_data) * s_data->philo_total);
-	if (u_data == NULL)
+	if (*u_data == NULL)
 		return (-1);
 	s_data->forks = fork_init(s_data);
 	if (s_data->forks == NULL)
