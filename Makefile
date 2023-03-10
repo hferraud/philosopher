@@ -20,7 +20,7 @@ OBJS		=		$(SRC:%.c=$(BUILD_DIR)%.o)
 
 DEPS		=		$(OBJS:.o=.d)
 
-CFLAGS		=		-Wall -Werror -Wextra -pthread #-fsanitize=thread
+CFLAGS		=		-Wall -Werror -Wextra -pthread -g3 #-fsanitize=thread
 
 IFLAGS		=		-I$(INC_DIR)
 

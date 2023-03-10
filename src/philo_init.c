@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 #include "philo.h"
 
-static int			philo_preset(t_philo_u_data *u_data, t_philo_s_data *s_data);
+static int			philo_preset(t_philo_u_data **u_data, t_philo_s_data *s_data);
 static pthread_t	philo_init_one(t_philo_u_data *u_data);
 static void			philo_init_error(t_philo_s_data *s_data);
 
@@ -21,7 +21,7 @@ t_philo_u_data	*philo_init(t_philo_s_data	*s_data)
 	size_t			i;
 
 	u_data = NULL;
-	if (philo_preset(u_data, s_data) == -1)
+	if (philo_preset(&u_data, s_data) == -1)
 		return (NULL);
 	i = 0;
 	while (i < s_data->philo_total)
@@ -36,27 +36,27 @@ t_philo_u_data	*philo_init(t_philo_s_data	*s_data)
 	return (u_data);
 }
 
-static int	philo_preset(t_philo_u_data *u_data, t_philo_s_data *s_data)
+static int	philo_preset(t_philo_u_data **u_data, t_philo_s_data *s_data)
 {
-	u_data = malloc(sizeof (t_philo_u_data) * s_data->philo_total);
+	*u_data = malloc(sizeof (t_philo_u_data) * s_data->philo_total);
 	if (u_data == NULL)
 		return (-1);
 	s_data->forks = fork_init(s_data);
 	if (s_data->forks == NULL)
 	{
-		free(u_data);
+		free(*u_data);
 		return (-1);
 	}
 	s_data->status.status = PENDING;
 	if (pthread_mutex_init(&s_data->status.lock, NULL) != 0)
 	{
-		free(u_data);
+		free(*u_data);
 		fork_clear(s_data);
 		return (-1);
 	}
 	if (pthread_mutex_init(&s_data->print_lock, NULL) != 0)
 	{
-		free(u_data);
+		free(*u_data);
 		fork_clear(s_data);
 		pthread_mutex_destroy(&s_data->status.lock);
 		return (-1);

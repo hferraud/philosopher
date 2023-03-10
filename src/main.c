@@ -24,5 +24,5 @@ int	main(int argc, char **argv)
 		return (errno);
 	if (philo_run(u_data, &s_data) == -1)
 		philo_clear(u_data, &s_data);
-	philo_exit(&s_data);
+	philo_clear(u_data, &s_data);
 }
