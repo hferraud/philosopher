@@ -73,11 +73,11 @@ static int	philo_use_fork(t_philo_u_data *u_data, t_philo_s_data *s_data,
 	int	ret;
 
 	ret = 0;
+	if (pthread_mutex_lock(&s_data->forks[fork1].lock) != 0)
+		return (-1);
 	if (s_data->forks[fork1].use == UNUSED)
 	{
 		gettimeofday(&u_data->meal_time, NULL);
-		if (pthread_mutex_lock(&s_data->forks[fork1].lock) != 0)
-			return (-1);
 		if (pthread_mutex_lock(&s_data->forks[fork2].lock) != 0)
 			return (-1);
 		if (s_data->forks[fork2].use == UNUSED)
