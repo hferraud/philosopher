@@ -30,7 +30,7 @@ t_philo_u_data	*philo_init(t_philo_s_data	*s_data)
 	if (pthread_mutex_init(&s_data->print_lock, NULL) != 0)
 		return (NULL);
 	i = 0;
-	while(i < s_data->philo_total)
+	while (i < s_data->philo_total)
 	{
 		u_data[i].philo_nb = i;
 		u_data[i].s_data = s_data;
@@ -48,5 +48,5 @@ static pthread_t	philo_init_one(t_philo_u_data *u_data)
 
 	u_data->meal_total = 0;
 	pthread_create(&thread_id, NULL, philo_routine, u_data);
-	return thread_id;
+	return (thread_id);
 }

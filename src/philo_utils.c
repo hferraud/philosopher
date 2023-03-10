@@ -17,7 +17,8 @@ static size_t	time_to_msec(struct timeval timestamp);
  * @brief suspend execution for millisecond intervals
  * @return 0 on success, -1 if an error occurred.
  */
-int	ft_usleep(struct timeval start_timestamp, size_t duration, t_philo_u_data *u_data)
+int	ft_usleep(struct timeval start_timestamp, size_t duration,
+		t_philo_u_data *u_data)
 {
 	size_t	elapsed_time;
 
@@ -48,8 +49,8 @@ static size_t	time_to_msec(struct timeval timestamp)
 {
 	size_t	m_sec;
 
-	m_sec = timestamp.tv_sec * (long) 1000
-			+ timestamp.tv_usec / (long) 1000.0
-			+ (long) 0.5;
+	m_sec = timestamp.tv_sec * (long) 1000.0
+		+ timestamp.tv_usec / (long) 1000.0
+		+ (long) 0.5;
 	return (m_sec);
 }

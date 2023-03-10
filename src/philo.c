@@ -63,7 +63,7 @@ void	philo_exit(t_philo_s_data *s_data)
 	size_t	i;
 
 	i = 0;
-	while(i < s_data->philo_total)
+	while (i < s_data->philo_total)
 	{
 		pthread_mutex_destroy(&s_data->forks->lock);
 		i++;

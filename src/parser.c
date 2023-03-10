@@ -11,9 +11,9 @@
 /* ************************************************************************** */
 #include "philo.h"
 
-static	size_t	ft_atoll(const char *str);
-static	bool		is_digit(char c);
-static	void parse_error(void);
+static size_t	ft_atoll(const char *str);
+static bool		is_digit(char c);
+static void		parse_error(void);
 
 void	philo_parse(int argc, char **args, t_philo_s_data *s_data)
 {
@@ -67,12 +67,12 @@ static size_t	ft_atoll(const char *str)
 	return (nb);
 }
 
-static bool is_digit(char c)
+static bool	is_digit(char c)
 {
 	return (c >= '0' && c <= '9');
 }
 
-static	void parse_error(void)
+static void	parse_error(void)
 {
 	write(2, "Parsing error\n", 14);
 }

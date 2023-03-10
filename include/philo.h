@@ -21,7 +21,7 @@
 # include "fork.h"
 # include "print.h"
 
-typedef struct s_fork t_fork;
+typedef struct s_fork	t_fork;
 
 typedef enum e_status
 {
@@ -66,10 +66,11 @@ void			philo_run(t_philo_u_data *u_data, t_philo_s_data *s_data);
 void			*philo_routine(void *arg);
 int				philo_eat(t_philo_u_data *u_data);
 void			philo_exit(t_philo_s_data *s_data);
-int             philo_equalizer(t_philo_u_data *u_data);
+int				philo_equalizer(t_philo_u_data *u_data);
 
-size_t	get_elapsed_time(struct timeval timestamp);
-size_t	get_time_between(struct timeval start, struct timeval end);
-int		ft_usleep(struct timeval start_timestamp, size_t duration, t_philo_u_data *u_data);
+size_t			get_elapsed_time(struct timeval timestamp);
+size_t			get_time_between(struct timeval start, struct timeval end);
+int				ft_usleep(struct timeval start_timestamp, size_t duration,
+					t_philo_u_data *u_data);
 
 #endif

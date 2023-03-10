@@ -16,7 +16,7 @@
 # include <pthread.h>
 # include "philo.h"
 
-typedef struct s_philo_s_data t_philo_s_data;
+typedef struct s_philo_s_data	t_philo_s_data;
 
 enum
 {
@@ -24,11 +24,11 @@ enum
 	RIGHT = 1
 };
 
-typedef enum
+typedef enum e_use
 {
 	USED,
 	UNUSED
-}t_use;
+}	t_use;
 
 typedef struct s_fork
 {

@@ -11,10 +11,10 @@
 /* ************************************************************************** */
 #include "philo.h"
 
-int main (int argc, char **argv)
+int	main(int argc, char **argv)
 {
 	t_philo_s_data	s_data;
-	t_philo_u_data 	*u_data;
+	t_philo_u_data	*u_data;
 
 	philo_parse(argc, argv, &s_data);
 	if (errno)
