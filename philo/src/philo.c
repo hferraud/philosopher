@@ -22,12 +22,9 @@ void	*philo_routine(void *arg)
 	u_data = (t_philo_u_data *) arg;
 	philo_start_routine(u_data);
 	pthread_mutex_lock(&u_data->s_data->meal_tracker.lock);
-	if (u_data->s_data->max_meal == -1)
-		u_data->s_data->meal_tracker.status = ENDLESS;
-	else
-		u_data->s_data->meal_tracker.status = COUNTED;
 	u_data->s_data->meal_tracker.meal_time[u_data->philo_nb]
 		= u_data->s_data->start_timestamp;
+	u_data->s_data->meal_tracker.started[u_data->philo_nb] = true;
 	pthread_mutex_unlock(&u_data->s_data->meal_tracker.lock);
 	while (1)
 	{
@@ -36,8 +33,6 @@ void	*philo_routine(void *arg)
 		if (philo_sleep(u_data, &timestamp) != 0)
 			return (NULL);
 		philo_print_think(u_data);
-		if (usleep(20) == -1)
-			return (NULL);
 	}
 }
 

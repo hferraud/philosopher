@@ -28,14 +28,6 @@ typedef enum e_status
 	INTERRUPTED
 }	t_status;
 
-typedef enum e_meal_status
-{
-	WAITING,
-	ENDLESS,
-	COUNTED,
-	FINISHED,
-}	t_meal_status;
-
 typedef struct s_philo_status
 {
 	t_status		status;
@@ -44,7 +36,8 @@ typedef struct s_philo_status
 
 typedef struct s_meal_tracker
 {
-	t_meal_status	*status;
+	bool			started[200];
+	ssize_t			*meal_count;
 	struct timeval	*meal_time;
 	pthread_mutex_t	lock;
 }					t_meal_tracker;
@@ -66,8 +59,6 @@ typedef struct s_philo_s_data
 typedef struct s_philo_u_data
 {
 	size_t			philo_nb;
-	ssize_t			meal_total;
-	struct timeval	meal_time;
 	pthread_t		thread_id;
 	t_philo_s_data	*s_data;
 }					t_philo_u_data;

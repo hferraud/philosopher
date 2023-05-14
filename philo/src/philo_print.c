@@ -15,7 +15,7 @@ void	philo_print_fork(t_philo_u_data *u_data)
 {
 	size_t	t;
 
-	t = get_time_between(u_data->s_data->start_timestamp, u_data->meal_time);
+	t = get_time_between(u_data->s_data->start_timestamp, u_data->s_data->meal_tracker.meal_time[u_data->philo_nb]);
 	pthread_mutex_lock(&u_data->s_data->print_lock);
 	printf("%s%zu %zu has taken a fork%s\n", AC_YELLOW,
 		t, u_data->philo_nb, AC_NORMAL);
@@ -26,7 +26,7 @@ void	philo_print_eat(t_philo_u_data *u_data)
 {
 	size_t	t;
 
-	t = get_time_between(u_data->s_data->start_timestamp, u_data->meal_time);
+	t = get_time_between(u_data->s_data->start_timestamp, u_data->s_data->meal_tracker.meal_time[u_data->philo_nb]);
 	pthread_mutex_lock(&u_data->s_data->print_lock);
 	printf("%s%zu %zu is eating%s\n", AC_GREEN,
 		t, u_data->philo_nb, AC_NORMAL);
