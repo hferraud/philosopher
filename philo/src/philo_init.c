@@ -31,7 +31,10 @@ t_philo_u_data	*philo_init(t_philo_s_data	*s_data)
 		u_data[i].s_data = s_data;
 		u_data[i].thread_id = philo_init_one(u_data + i);
 		if (errno)
-			return (philo_init_error(s_data), NULL);
+		{
+			philo_init_error(s_data);
+			return (NULL);
+		}
 		i++;
 	}
 	return (u_data);

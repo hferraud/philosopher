@@ -21,15 +21,21 @@ void	*philo_routine(void *arg)
 
 	u_data = (t_philo_u_data *) arg;
 	philo_start_routine(u_data);
-	u_data->last_meal = u_data->s_data->start_timestamp;
+	pthread_mutex_lock(&u_data->s_data->meal_tracker.lock);
+	if (u_data->s_data->max_meal == -1)
+		u_data->s_data->meal_tracker.status = ENDLESS;
+	else
+		u_data->s_data->meal_tracker.status = COUNTED;
+	u_data->s_data->meal_tracker.meal_time[u_data->philo_nb]
+		= u_data->s_data->start_timestamp;
+	pthread_mutex_unlock(&u_data->s_data->meal_tracker.lock);
 	while (1)
 	{
 		if (philo_eat(u_data, &timestamp) != 0)
 			return (NULL);
 		if (philo_sleep(u_data, &timestamp) != 0)
 			return (NULL);
-		if (philo_print_think(u_data) == -1)
-			return (NULL);
+		philo_print_think(u_data);
 		if (usleep(20) == -1)
 			return (NULL);
 	}
@@ -37,14 +43,12 @@ void	*philo_routine(void *arg)
 
 int	philo_run(t_philo_u_data *u_data, t_philo_s_data *s_data)
 {
-	size_t			i;
+	size_t	i;
 
-	if (pthread_mutex_lock(&s_data->status.lock) != 0)
-		return (-1);
+	pthread_mutex_lock(&s_data->status.lock);
 	s_data->status.status = RUNNING;
 	gettimeofday(&s_data->start_timestamp, NULL);
-	if (pthread_mutex_unlock(&s_data->status.lock) != 0)
-		return (-1);
+	pthread_mutex_unlock(&s_data->status.lock);
 	i = 0;
 	while (i < s_data->philo_total)
 	{
@@ -58,14 +62,11 @@ int	philo_run(t_philo_u_data *u_data, t_philo_s_data *s_data)
 
 static int	philo_sleep(t_philo_u_data *u_data, struct timeval *timestamp)
 {
-	if (philo_equalizer(u_data))
+	if (!philo_check_status(u_data->s_data))
 		return (1);
-	if (philo_print_sleep(u_data, *timestamp) == -1)
-		return (-1);
+	philo_print_sleep(u_data, *timestamp);
 	if (ft_usleep(*timestamp, u_data->s_data->time_to_sleep, u_data) == 1)
 		return (1);
-	if (errno)
-		return (-1);
 	return (0);
 }
 
@@ -76,11 +77,9 @@ static int	philo_start_routine(t_philo_u_data *u_data)
 	status = PENDING;
 	while (status == PENDING)
 	{
-		if (pthread_mutex_lock(&u_data->s_data->status.lock) != 0)
-			return (-1);
+		pthread_mutex_lock(&u_data->s_data->status.lock);
 		status = u_data->s_data->status.status;
-		if (pthread_mutex_unlock(&u_data->s_data->status.lock) != 0)
-			return (-1);
+		pthread_mutex_unlock(&u_data->s_data->status.lock);
 	}
 	if (status == INTERRUPTED)
 		return (-1);

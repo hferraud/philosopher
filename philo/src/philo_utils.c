@@ -15,7 +15,7 @@ static size_t	time_to_msec(struct timeval timestamp);
 
 /**
  * @brief suspend execution for millisecond intervals
- * @return 0 on success, -1 if an error occurred.
+ * @return 0 on success, 1 if status is interrupted.
  */
 int	ft_usleep(struct timeval start_timestamp, size_t duration,
 		t_philo_u_data *u_data)
@@ -25,7 +25,7 @@ int	ft_usleep(struct timeval start_timestamp, size_t duration,
 	elapsed_time = get_elapsed_time(start_timestamp);
 	while (elapsed_time < duration)
 	{
-		if (philo_equalizer(u_data))
+		if (!philo_check_status(u_data->s_data))
 			return (1);
 		elapsed_time = get_elapsed_time(start_timestamp);
 	}

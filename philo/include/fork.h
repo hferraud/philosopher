@@ -24,19 +24,7 @@ enum
 	RIGHT = 1
 };
 
-typedef enum e_use
-{
-	USED,
-	UNUSED
-}	t_use;
-
-typedef struct s_fork
-{
-	t_use			use;
-	pthread_mutex_t	lock;
-}					t_fork;
-
-t_fork	*fork_init(t_philo_s_data *s_data);
-void	fork_clear(t_philo_s_data *s_data);
+pthread_mutex_t	*fork_init(t_philo_s_data *s_data);
+void			fork_clear(t_philo_s_data *s_data);
 
 #endif

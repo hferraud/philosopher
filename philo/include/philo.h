@@ -21,8 +21,6 @@
 # include "fork.h"
 # include "print.h"
 
-typedef struct s_fork	t_fork;
-
 typedef enum e_status
 {
 	PENDING,
@@ -30,11 +28,26 @@ typedef enum e_status
 	INTERRUPTED
 }	t_status;
 
+typedef enum e_meal_status
+{
+	WAITING,
+	ENDLESS,
+	COUNTED,
+	FINISHED,
+}	t_meal_status;
+
 typedef struct s_philo_status
 {
 	t_status		status;
 	pthread_mutex_t	lock;
 }					t_philo_status;
+
+typedef struct s_meal_tracker
+{
+	t_meal_status	*status;
+	struct timeval	*meal_time;
+	pthread_mutex_t	lock;
+}					t_meal_tracker;
 
 typedef struct s_philo_s_data
 {
@@ -44,8 +57,9 @@ typedef struct s_philo_s_data
 	size_t			time_to_sleep;
 	ssize_t			max_meal;
 	struct timeval	start_timestamp;
-	t_fork			*forks;
+	pthread_mutex_t	*forks;
 	t_philo_status	status;
+	t_meal_tracker	meal_tracker;
 	pthread_mutex_t	print_lock;
 }					t_philo_s_data;
 
@@ -54,7 +68,6 @@ typedef struct s_philo_u_data
 	size_t			philo_nb;
 	ssize_t			meal_total;
 	struct timeval	meal_time;
-	struct timeval	last_meal;
 	pthread_t		thread_id;
 	t_philo_s_data	*s_data;
 }					t_philo_u_data;
@@ -62,10 +75,11 @@ typedef struct s_philo_u_data
 void			philo_parse(int argc, char **args, t_philo_s_data *s_data);
 t_philo_u_data	*philo_init(t_philo_s_data	*s_data);
 void			philo_clear(t_philo_u_data *u_data, t_philo_s_data *s_data);
+int				philo_equalizer_init(t_philo_s_data *s_data, pthread_t *thread);
 int				philo_run(t_philo_u_data *u_data, t_philo_s_data *s_data);
 void			*philo_routine(void *arg);
 int				philo_eat(t_philo_u_data *u_data, struct timeval *timestamp);
-int				philo_equalizer(t_philo_u_data *u_data);
+bool			philo_check_status(t_philo_s_data *s_data);
 
 size_t			get_elapsed_time(struct timeval timestamp);
 size_t			get_time_between(struct timeval start, struct timeval end);
