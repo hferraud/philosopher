@@ -39,8 +39,10 @@ typedef struct s_meal_tracker
 	bool			started[200];
 	ssize_t			*meal_count;
 	struct timeval	*meal_time;
-	pthread_mutex_t	lock;
+	pthread_mutex_t	*lock;
 }					t_meal_tracker;
+
+
 
 typedef struct s_philo_s_data
 {

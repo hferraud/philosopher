@@ -14,6 +14,7 @@
 static int			philo_preset(t_philo_u_data **u_data,
 						t_philo_s_data *s_data);
 static int			init_meal_tracker(t_philo_s_data *s_data);
+static int			init_meal_tracker_lock(t_philo_s_data *s_data);
 static pthread_t	philo_init_one(t_philo_u_data *u_data);
 
 t_philo_u_data	*philo_init(t_philo_s_data	*s_data)
@@ -82,11 +83,37 @@ static int	init_meal_tracker(t_philo_s_data *s_data)
 		free(s_data->meal_tracker.meal_count);
 		return (-1);
 	}
-	if (pthread_mutex_init(&s_data->meal_tracker.lock, NULL) != 0)
+	if (init_meal_tracker_lock(s_data) == -1)
 	{
 		free(s_data->meal_tracker.meal_count);
 		free(s_data->meal_tracker.meal_time);
 		return (-1);
+	}
+	return (0);
+}
+
+static int	init_meal_tracker_lock(t_philo_s_data *s_data)
+{
+	size_t	i;
+
+	s_data->meal_tracker.lock
+		= malloc(sizeof(pthread_mutex_t) * s_data->philo_total);
+	if (s_data->meal_tracker.lock == NULL)
+		return (-1);
+	i = 0;
+	while (i < s_data->philo_total)
+	{
+		if (pthread_mutex_init(&s_data->meal_tracker.lock[i], NULL) != 0)
+		{
+			while (i)
+			{
+				i--;
+				pthread_mutex_destroy(&s_data->meal_tracker.lock[i]);
+			}
+			free(s_data->meal_tracker.lock);
+			return (-1);
+		}
+		i++;
 	}
 	return (0);
 }

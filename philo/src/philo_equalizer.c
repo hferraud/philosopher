@@ -77,10 +77,10 @@ static void	philo_equalize(t_philo_s_data *s_data)
 static int	check_meal_tracker(t_philo_s_data *s_data,
 				bool *flag, size_t *elapsed_time, size_t i)
 {
-	pthread_mutex_lock(&s_data->meal_tracker.lock);
+	pthread_mutex_lock(&s_data->meal_tracker.lock[i]);
 	if (s_data->meal_tracker.started[i] == false)
 	{
-		pthread_mutex_unlock(&s_data->meal_tracker.lock);
+		pthread_mutex_unlock(&s_data->meal_tracker.lock[i]);
 		return (1);
 	}
 	if (s_data->max_meal == -1)
@@ -88,7 +88,7 @@ static int	check_meal_tracker(t_philo_s_data *s_data,
 	else if (s_data->meal_tracker.meal_count[i] < s_data->max_meal)
 		*flag = false;
 	*elapsed_time = get_elapsed_time(s_data->meal_tracker.meal_time[i]);
-	pthread_mutex_unlock(&s_data->meal_tracker.lock);
+	pthread_mutex_unlock(&s_data->meal_tracker.lock[i]);
 	return (0);
 }
 

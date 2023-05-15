@@ -28,6 +28,7 @@ int	ft_usleep(struct timeval start_timestamp, size_t duration,
 		if (!philo_check_status(u_data->s_data))
 			return (1);
 		elapsed_time = get_elapsed_time(start_timestamp);
+		usleep(5);
 	}
 	return (0);
 }

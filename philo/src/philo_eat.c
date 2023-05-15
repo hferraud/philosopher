@@ -34,9 +34,9 @@ int	philo_eat(t_philo_u_data *u_data, struct timeval *timestamp)
 	}
 	philo_unuse_fork(u_data, s_data);
 	gettimeofday(timestamp, NULL);
-	pthread_mutex_lock(&u_data->s_data->meal_tracker.lock);
+	pthread_mutex_lock(&u_data->s_data->meal_tracker.lock[u_data->philo_nb]);
 	s_data->meal_tracker.meal_count[u_data->philo_nb]++;
-	pthread_mutex_unlock(&u_data->s_data->meal_tracker.lock);
+	pthread_mutex_unlock(&u_data->s_data->meal_tracker.lock[u_data->philo_nb]);
 	return (0);
 }
 
@@ -55,9 +55,9 @@ static int	philo_use_fork(t_philo_u_data *u_data, t_philo_s_data *s_data,
 	pthread_mutex_lock(&s_data->forks[fork1]);
 	pthread_mutex_lock(&s_data->forks[fork2]);
 	gettimeofday(timestamp, NULL);
-	pthread_mutex_lock(&s_data->meal_tracker.lock);
+	pthread_mutex_lock(&s_data->meal_tracker.lock[u_data->philo_nb]);
 	s_data->meal_tracker.meal_time[u_data->philo_nb] = *timestamp;
-	pthread_mutex_unlock(&s_data->meal_tracker.lock);
+	pthread_mutex_unlock(&s_data->meal_tracker.lock[u_data->philo_nb]);
 	if (philo_print_fork(u_data) == 1)
 		return (philo_unuse_fork(u_data, s_data), 1);
 	if (philo_print_fork(u_data) == 1)

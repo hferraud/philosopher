@@ -23,13 +23,17 @@ void	*philo_routine(void *arg)
 	u_data = (t_philo_u_data *) arg;
 	if (philo_start_routine(u_data) == 1)
 		return (NULL);
-	pthread_mutex_lock(&u_data->s_data->meal_tracker.lock);
+	pthread_mutex_lock(&u_data->s_data->meal_tracker.lock[u_data->philo_nb]);
 	u_data->s_data->meal_tracker.meal_time[u_data->philo_nb]
 		= u_data->s_data->start_timestamp;
 	u_data->s_data->meal_tracker.started[u_data->philo_nb] = true;
-	pthread_mutex_unlock(&u_data->s_data->meal_tracker.lock);
+	pthread_mutex_unlock(&u_data->s_data->meal_tracker.lock[u_data->philo_nb]);
 	if (u_data->s_data->philo_total == 1)
 		return (philo_wait(u_data), NULL);
+
+	if (u_data->philo_nb % 2
+		&& u_data->s_data->time_to_eat < u_data->s_data->time_to_die)
+		usleep(u_data->s_data->time_to_eat * 7 / 10 * 1000);
 	while (1)
 	{
 		if (philo_eat(u_data, &timestamp) == 1)
