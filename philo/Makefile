@@ -11,6 +11,7 @@ SRC			=		main.c \
 					philo_eat.c \
 					philo_init.c \
 					philo_clear.c \
+					philo_time.c \
 					philo_utils.c \
 					philo_print.c \
 					philo_equalizer.c \
@@ -21,7 +22,7 @@ OBJS		=		$(SRC:%.c=$(BUILD_DIR)%.o)
 
 DEPS		=		$(OBJS:.o=.d)
 
-CFLAGS		=		-Wall -Werror -Wextra -pthread #-fsanitize=address
+CFLAGS		=		-Wall -Werror -Wextra -pthread
 
 IFLAGS		=		-I$(INC_DIR)
 

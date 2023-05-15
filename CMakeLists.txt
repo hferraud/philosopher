@@ -17,4 +17,4 @@ add_executable(philo
         philo/src/philo_equalizer.c
         philo/src/philo_init.c
         philo/src/philo_print.c
-        philo/src/philo_utils.c philo/src/philo_clear.c)
+        philo/src/philo_utils.c philo/src/philo_clear.c philo/src/philo_time.c)

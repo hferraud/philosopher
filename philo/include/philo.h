@@ -21,6 +21,8 @@
 # include "fork.h"
 # include "print.h"
 
+# define PHILO_LIMIT 200
+
 typedef enum e_status
 {
 	PENDING,
@@ -36,13 +38,11 @@ typedef struct s_philo_status
 
 typedef struct s_meal_tracker
 {
-	bool			started[200];
+	bool			started[PHILO_LIMIT];
 	ssize_t			*meal_count;
 	struct timeval	*meal_time;
 	pthread_mutex_t	*lock;
 }					t_meal_tracker;
-
-
 
 typedef struct s_philo_s_data
 {
@@ -73,6 +73,7 @@ int				philo_run(t_philo_u_data *u_data, t_philo_s_data *s_data);
 void			*philo_routine(void *arg);
 int				philo_eat(t_philo_u_data *u_data, struct timeval *timestamp);
 bool			philo_check_status(t_philo_s_data *s_data);
+void			philo_wait(t_philo_u_data *u_data);
 
 size_t			get_elapsed_time(struct timeval timestamp);
 size_t			get_time_between(struct timeval start, struct timeval end);

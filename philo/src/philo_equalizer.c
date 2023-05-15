@@ -20,7 +20,12 @@ static void	interrupt_status(t_philo_s_data *s_data);
 int	philo_equalizer_init(t_philo_s_data *s_data, pthread_t *thread)
 {
 	if (pthread_create(thread, NULL, equalizer_routine, s_data) != 0)
+	{
+		pthread_mutex_lock(&s_data->status.lock);
+		s_data->status.status = INTERRUPTED;
+		pthread_mutex_unlock(&s_data->status.lock);
 		return (-1);
+	}
 	return (0);
 }
 
