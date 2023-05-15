@@ -20,7 +20,8 @@ void	*philo_routine(void *arg)
 	struct timeval	timestamp;
 
 	u_data = (t_philo_u_data *) arg;
-	philo_start_routine(u_data);
+	if (philo_start_routine(u_data) == 1)
+        return (NULL);
 	pthread_mutex_lock(&u_data->s_data->meal_tracker.lock);
 	u_data->s_data->meal_tracker.meal_time[u_data->philo_nb]
 		= u_data->s_data->start_timestamp;
@@ -28,11 +29,13 @@ void	*philo_routine(void *arg)
 	pthread_mutex_unlock(&u_data->s_data->meal_tracker.lock);
 	while (1)
 	{
-		if (philo_eat(u_data, &timestamp) != 0)
+		if (philo_eat(u_data, &timestamp) == 1)
 			return (NULL);
-		if (philo_sleep(u_data, &timestamp) != 0)
+		if (philo_sleep(u_data, &timestamp) == 1)
 			return (NULL);
-		philo_print_think(u_data);
+		if (philo_print_think(u_data) == 1)
+            return (NULL);
+        usleep(50);
 	}
 }
 
@@ -57,9 +60,8 @@ int	philo_run(t_philo_u_data *u_data, t_philo_s_data *s_data)
 
 static int	philo_sleep(t_philo_u_data *u_data, struct timeval *timestamp)
 {
-	if (!philo_check_status(u_data->s_data))
-		return (1);
-	philo_print_sleep(u_data, *timestamp);
+	if (philo_print_sleep(u_data, *timestamp) == 1)
+        return (1);
 	if (ft_usleep(*timestamp, u_data->s_data->time_to_sleep, u_data) == 1)
 		return (1);
 	return (0);
@@ -77,6 +79,6 @@ static int	philo_start_routine(t_philo_u_data *u_data)
 		pthread_mutex_unlock(&u_data->s_data->status.lock);
 	}
 	if (status == INTERRUPTED)
-		return (-1);
+		return (1);
 	return (0);
 }

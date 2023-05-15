@@ -36,5 +36,6 @@ int	main(int argc, char **argv)
 		printf("An error occurred\n");
 		philo_clear(u_data, &s_data);
 	}
+    pthread_join(equalizer, NULL);
 	philo_clear(u_data, &s_data);
 }
