@@ -10,6 +10,7 @@ SRC			=		main.c \
 					philo.c \
 					philo_eat.c \
 					philo_init.c \
+					philo_clear.c \
 					philo_utils.c \
 					philo_print.c \
 					philo_equalizer.c \

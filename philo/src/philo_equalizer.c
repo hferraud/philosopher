@@ -13,13 +13,14 @@
 
 static void	*equalizer_routine(void *arg);
 static void	philo_equalize(t_philo_s_data *s_data);
+static int	check_meal_tracker(t_philo_s_data *s_data,
+				bool *flag, size_t *elapsed_time, size_t i);
+static void	interrupt_status(t_philo_s_data *s_data);
 
 int	philo_equalizer_init(t_philo_s_data *s_data, pthread_t *thread)
 {
 	if (pthread_create(thread, NULL, equalizer_routine, s_data) != 0)
-	{
 		return (-1);
-	}
 	return (0);
 }
 
@@ -56,46 +57,44 @@ static void	philo_equalize(t_philo_s_data *s_data)
 	flag = true;
 	while (i < s_data->philo_total)
 	{
-		pthread_mutex_lock(&s_data->meal_tracker.lock);
-		if (s_data->meal_tracker.started[i] == false)
-		{
-			pthread_mutex_unlock(&s_data->meal_tracker.lock);
+		if (check_meal_tracker(s_data, &flag, &elapsed_time, i) == 1)
 			continue ;
-		}
-		if (s_data->max_meal == -1)
-			flag = false;
-		else if (s_data->meal_tracker.meal_count[i] < s_data->max_meal)
-			flag = false;
-		elapsed_time = get_elapsed_time(s_data->meal_tracker.meal_time[i]);
-		pthread_mutex_unlock(&s_data->meal_tracker.lock);
 		if (elapsed_time > s_data->time_to_die)
 		{
-			pthread_mutex_lock(&s_data->status.lock);
-			s_data->status.status = INTERRUPTED;
-			pthread_mutex_unlock(&s_data->status.lock);
+			interrupt_status(s_data);
 			philo_print_death(s_data, i);
 			break ;
 		}
 		i++;
 	}
 	if (flag)
-	{
-		pthread_mutex_lock(&s_data->status.lock);
-		s_data->status.status = INTERRUPTED;
-		pthread_mutex_lock(&s_data->status.lock);
-	}
+		interrupt_status(s_data);
 }
 
 /**
- * @return True if the status is RUNNING, false otherwise
+ * @return 1 if the philo has not started the simulation, 0 otherwise
  */
-bool	philo_check_status(t_philo_s_data *s_data)
+static int	check_meal_tracker(t_philo_s_data *s_data,
+				bool *flag, size_t *elapsed_time, size_t i)
 {
-	t_status	status;
-
-	pthread_mutex_lock(&s_data->status.lock);
-	status = s_data->status.status;
-	pthread_mutex_unlock(&s_data->status.lock);
-	return (status == RUNNING);
+	pthread_mutex_lock(&s_data->meal_tracker.lock);
+	if (s_data->meal_tracker.started[i] == false)
+	{
+		pthread_mutex_unlock(&s_data->meal_tracker.lock);
+		return (1);
+	}
+	if (s_data->max_meal == -1)
+		*flag = false;
+	else if (s_data->meal_tracker.meal_count[i] < s_data->max_meal)
+		*flag = false;
+	*elapsed_time = get_elapsed_time(s_data->meal_tracker.meal_time[i]);
+	pthread_mutex_unlock(&s_data->meal_tracker.lock);
+	return (0);
 }
 
+static void	interrupt_status(t_philo_s_data *s_data)
+{
+	pthread_mutex_lock(&s_data->status.lock);
+	s_data->status.status = INTERRUPTED;
+	pthread_mutex_unlock(&s_data->status.lock);
+}

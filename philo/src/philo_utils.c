@@ -54,3 +54,16 @@ static size_t	time_to_msec(struct timeval timestamp)
 		+ (long) 0.5;
 	return (m_sec);
 }
+
+/**
+ * @return True if the status is RUNNING, false otherwise
+ */
+bool	philo_check_status(t_philo_s_data *s_data)
+{
+	t_status	status;
+
+	pthread_mutex_lock(&s_data->status.lock);
+	status = s_data->status.status;
+	pthread_mutex_unlock(&s_data->status.lock);
+	return (status == RUNNING);
+}
