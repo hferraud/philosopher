@@ -22,7 +22,7 @@ OBJS		=		$(SRC:%.c=$(BUILD_DIR)%.o)
 
 DEPS		=		$(OBJS:.o=.d)
 
-CFLAGS		=		-Wall -Werror -Wextra -pthread
+CFLAGS		=		-Wall -Werror -Wextra -pthread -fsanitize=address
 
 IFLAGS		=		-I$(INC_DIR)
 

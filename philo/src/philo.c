@@ -28,7 +28,10 @@ void	*philo_routine(void *arg)
 		return (philo_wait(u_data), NULL);
 	if (u_data->philo_nb % 2
 		&& u_data->s_data->time_to_eat < u_data->s_data->time_to_die)
+	{
+		philo_print_think(u_data);
 		usleep(u_data->s_data->time_to_eat * 7 / 10 * 1000);
+	}
 	while (1)
 	{
 		if (philo_eat(u_data, &timestamp) == 1)
